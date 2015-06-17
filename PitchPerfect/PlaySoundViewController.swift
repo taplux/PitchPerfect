@@ -23,18 +23,11 @@ class PlaySoundViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-//        if var filePath = NSBundle.mainBundle().pathForResource("movie_quote", ofType:"mp3"){
-//            var filePathUrl = NSURL.fileURLWithPath(filePath)
-//
-//
-//        }else {
-//            println("Path for audio file not found")
-//        }
-        audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, error: nil)
+        audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathURL, error: nil)
         audioPlayer.enableRate = true
         
         audioEngine = AVAudioEngine()
-        audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
+        audioFile = AVAudioFile(forReading: receivedAudio.filePathURL, error: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,6 +37,8 @@ class PlaySoundViewController: UIViewController {
     
     @IBAction func playSoundSlow(sender: UIButton) {
         audioPlayer.stop()
+        audioEngine.stop()
+        audioEngine.reset()
         audioPlayer.rate = 0.5
         audioPlayer.currentTime = 0
         audioPlayer.play()
@@ -51,6 +46,9 @@ class PlaySoundViewController: UIViewController {
 
     @IBAction func playSoundFast(sender: UIButton) {
         audioPlayer.stop()
+        audioPlayer.stop()
+        audioEngine.stop()
+        audioEngine.reset()
         audioPlayer.rate = 2
         audioPlayer.currentTime = 0
         audioPlayer.play()
@@ -90,15 +88,4 @@ class PlaySoundViewController: UIViewController {
     @IBAction func playDarthAudio(sender: UIButton) {
         playAudioWithVariablePitch(-1000)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
