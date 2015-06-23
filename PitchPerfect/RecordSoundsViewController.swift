@@ -33,8 +33,9 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate {
     
     override func viewWillAppear(animated: Bool) {
         // Hide the stop button
+        super.viewWillAppear(animated)
         recordLabel.hidden = false
-        recordLabel.text = "Tap to Record"
+        recordLabelUpdate("Tap to record")
         stopButton.hidden = true
         recordButton.enabled = true
     }
@@ -42,7 +43,7 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate {
     @IBAction func recordAudio(sender: UIButton) {
         //Record the user's voice
         println("in recordAudio")
-        recordLabel.text = "Recording..."
+        recordLabelUpdate("Recording...")
         stopButton.hidden = false
         recordButton.enabled = false
         let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
@@ -64,12 +65,18 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate {
         audioRecorder.prepareToRecord()
         audioRecorder.record()
     }
+    
+    func recordLabelUpdate(myLabel: String) {
+        recordLabel.text = myLabel
+    }
+    
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
         if(flag) {
             recordedAudio = RecordedAudio(filePathURL: recorder.url, title: recorder.url.lastPathComponent!)
             self.performSegueWithIdentifier("stopRecording", sender: recordedAudio)
         }else{
             println("Recording was not successful!")
+            recordLabelUpdate("Oops! Something went wrong...")
             recordButton.enabled = true
             stopButton.hidden = true
         }
@@ -86,12 +93,11 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate {
     @IBAction func stopRecord(sender: UIButton) {
         print("stop recording")
         recordLabel.hidden = true
-        recordLabel.text = "Tap to Record"
+        recordLabelUpdate("Tap to record")
         stopButton.hidden = true
         audioRecorder.stop()
         var audioSession = AVAudioSession.sharedInstance()
         audioSession.setActive(false, error: nil)
     }
-    
 }
 
